@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rootwolverine>
+  <!--*********-->
+  <!-- Context -->
+  <!--*********-->
+  <!--*********-->
+  <context id="FlowNameCtx" implClass="com.fortis.be.tfal.operations.context.GetUserInfoOpContext" type="op">
+		<!--some ref k coll-->
+		<refKColl refId="FlowNameData"/>
+		<!-- some refService here 1 -->
+		<!-- some refService here 2 -->
+		<refService alias="connectionManager" refId="JDBCIB2ConnectionManager" type="jdbcManager"/>
+		<refService alias="CSServer" refId="realCSServer" type="cs"/>
+		<refService alias="proximaService" refId="proximaService" type="prx"/>
+		<refService alias="dummyService" refId="dummyService" type="prx"/>
+		<refService alias="messageResourcesSrv" refId="realMessageResourcesService" type="multilan"/>
+		
+	</context>
+  <kColl id="FlowNameData">
+		<!-- data  for GetLogonInfo -->
+		<refData refId="CommonJDBCData"/>
+		<refData refId="CommonJournalData"/>
+		<!-- Data for GetUserINfo service (Mian flow)-->
+		<!-- common infrastructure fields -->
+		<field id="xml-response-encoding" value="ISO-8859-1"/>
+		<field id="global-error-indicator"/>
+		<field id="was-return-code"/>
+		<field id="text"/>
+		<refData refId="CUSTOMER-DATA"/> 
+		<refData refId="LOGON-DATA"/> 
+		<!-- Data for GetDIgitalCOntractInfo Service -->
+		<field id="mode"/>
+		<field id="type-call" value="01"/>
+		<!-- Error Handling -->
+		<refData refId="SEWI-LIST"/>
+	</kColl>
+  <kColl id="CUSTOMER-DATA">
+		<field id="name"/>
+		<field id="first-name"/>
+		<field id="language"/>
+	</kColl>
+  <kColl id="LOGON-DATA">
+		<field id="last-logon-timestamp"/>
+		<field id="previous-logon-timestamp"/>
+		<field id="read-only"/>
+		<field id="logon-profiles"/>
+	</kColl>
+</rootwolverine>

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GetUserInfoOp.xml>
+	<!--***********9999 -->
+	<!-- Operation -->
+	<!--*********** -->
+	<processor
+		implClass="com.fortis.be.tfal.operations.automation.GetUserInfoOpProcessor"
+		id="GetUserInfoOp" refFlow="automatonFlow" operationContext="FlowNameCtx"
+		unknownParameter="Unknown">
+		<!-- GetLogonInfo request/response mappers -->
+		<refFormat name="GetUserInfoOp_GetLogonInfoOpInputMapFmt"
+			refId="GetUserInfoOp_GetLogonInfoOpInputMapFmt" />
+		<refFormat name="GetUserInfoOp_GetLogonInfoOpOutputMapFmt"
+			refId="GetUserInfoOp_GetLogonInfoOpOutputMapFmt" />
+		<!-- GetDigitalContractInfo request/response mappers -->
+		<refFormat name="GetUserInfoOp_GetDigitalContractInfoOpInputMapFmt"
+			refId="GetUserInfoOp_GetDigitalContractInfoOpInputMapFmt" />
+		<refFormat name="GetUserInfoOp_GetDigitalContractInfoOpOutputMapFmt"
+			refId="GetUserInfoOp_GetDigitalContractInfoOpOutputMapFmt" />
+		<!-- GetLightCustomerData request/response mappers -->
+		<refFormat name="GetUserInfoOp_GetLightCustomerDataOpInputMapFmt"
+			refId="GetUserInfoOp_GetLightCustomerDataOpInputMapFmt" />
+		<refFormat name="GetUserInfoOp_GetLightCustomerDataOpOutputMapFmt"
+			refId="GetUserInfoOp_GetLightCustomerDataOpOutputMapFmt" />
+		<!-- Maps the JRF Pivot object to the context -->
+		<refFormat name="jrfInputPivotMapper" refId="GetUserInfoMIBInputPivotMapper" />
+		<unknownTag name="someting" refId="over" />
+		<refFormat name="jrfOutputPivotMapper" refId="GetUserInfoMIBOutputPivotMapper" />
+		<!-- Journal Format -->
+		<state id="GetLightCustomerDataState">
+			<entryActions>
+				<executeSubflowAct id="GetLightCustomerDataAct"
+					processor="GetLightCustomerDataOp" inputMapFmt="GetUserInfoOp_GetLightCustomerDataOpInputMapFmt"
+					outputMapFmt="GetUserInfoOp_GetLightCustomerDataOpOutputMapFmt">
+				</executeSubflowAct>
+			</entryActions>
+			<transitions>
+				<transition id="GetLightCustomerDataAct.ok" targetState="GetDigitalContractInfoState" />
+				<transition id="GetLightCustomerDataAct.error"
+					targetState="globalErrorIndicatorState" />
+			</transitions>
+		</state>
+		<refFormat name="xmlResponseFormat" refId="GetUserInfoOpXMLResponseFmt" />
+		<refFormat name="journalFormat" refId="GetUserInfoOpJournalFmt" />
+	</processor>
+	<!--****** -->
+	<!-- Flow -->
+	<!--****** -->
+	<flow id="automatonFlow">
+		<!-- State of GetLogonInfo -->
+		<state id="GetLogonInfoState" type="initial">
+			<!-- EntryActions State -->
+			<entryActions>
+				<!-- Execute SubFlow -->
+				<executeSubflowAct id="GetLogonInfoAct" processor="GetLogonInfoOp"
+					inputMapFmt="GetUserInfoOp_GetLogonInfoOpInputMapFmt" outputMapFmt="GetUserInfoOp_GetLogonInfoOpOutputMapFmt">
+				</executeSubflowAct>
+			</entryActions>
+			<!-- All transitions -->
+			<transitions>
+				<!-- Transtions ONE -->
+				<transition id="GetLogonInfoAct.ok" targetState="GetLightCustomerDataState" />
+				<!-- Transtions TWO -->
+				<transition id="GetLogonInfoAct.error" targetState="globalErrorIndicatorState" />
+			</transitions>
+		</state>
+		<state id="GetLightCustomerDataState">
+			<entryActions>
+				<executeSubflowAct id="GetLightCustomerDataAct"
+					processor="GetLightCustomerDataOp" inputMapFmt="GetUserInfoOp_GetLightCustomerDataOpInputMapFmt"
+					outputMapFmt="GetUserInfoOp_GetLightCustomerDataOpOutputMapFmt">
+				</executeSubflowAct>
+			</entryActions>
+			<transitions>
+				<transition id="GetLightCustomerDataAct.ok" targetState="GetDigitalContractInfoState" />
+				<transition id="GetLightCustomerDataAct.error"
+					targetState="globalErrorIndicatorState" />
+			</transitions>
+		</state>
+		<state id="GetDigitalContractInfoState">
+			<entryActions>
+				<executeSubflowAct id="GetDigitalContractInfoAct"
+					processor="GetDigitalContractInfoOp" inputMapFmt="GetUserInfoOp_GetDigitalContractInfoOpInputMapFmt"
+					outputMapFmt="GetUserInfoOp_GetDigitalContractInfoOpOutputMapFmt">
+				</executeSubflowAct>
+			</entryActions>
+			<transitions>
+				<transition id="GetDigitalContractInfoAct.ok"
+					targetState="globalErrorIndicatorState" />
+				<transition id="GetDigitalContractInfoAct.error"
+					targetState="globalErrorIndicatorState" />
+			</transitions>
+		</state>
+		<!-- SET GLOBAL ERROR INDICATOR -->
+		<state id="globalErrorIndicatorState" type="operation">
+			<entryActions>
+				<globalErrorIndicator id="globalErrorIndicatorAct"
+					setWasReturnCode="true" />
+			</entryActions>
+			<transitions>
+				<transition id="globalErrorIndicatorAct.sewiAlert"
+					targetState="journalErrorState" />
+				<transition id="globalErrorIndicatorAct.error"
+					targetState="journalErrorState" />
+				<transition id="globalErrorIndicatorAct.ok" targetState="journalState" />
+			</transitions>
+		</state>
+		<!-- Xalos Logging -->
+		<state id="journalState">
+			<entryActions>
+				<journalStep id="journalAct" mti="N65" fctType="772"
+					serviceName="proximaService" sendFormat="journalFormat" doLogging="@doLogging" />
+			</entryActions>
+			<transitions>
+				<transition id="journalAct.ok" targetState="finalOk" />
+				<transition id="journalAct.error" targetState="finalOk" />
+			</transitions>
+		</state>
+		<!-- Xalos Logging in error state -->
+		<state id="journalErrorState">
+			<entryActions>
+				<journalStep id="journalAct" mti="N65" fctType="772"
+					serviceName="proximaService" sendFormat="journalFormat" doLogging="@doLogging" />
+			</entryActions>
+			<transitions>
+				<transition id="journalAct.ok" targetState="finalError" />
+				<transition id="journalAct.error" targetState="finalError" />
+			</transitions>
+		</state>
+		<state id="finalOk" type="final" typeIdInfo="ok" />
+		<state id="finalError" type="final" typeIdInfo="error" />
+	</flow>
+	<!--********* -->
+	<!-- Context -->
+	<!--********* -->
+	<!--********* -->
+	<context id="FlowNameCtx" type="op"
+		implClass="com.fortis.be.tfal.operations.context.GetUserInfoOpContext">
+		<!--some ref k coll -->
+		<refKColl refId="FlowNameData">
+			<iniValues name="HELL" value="HEVEAN" />
+			<iniValue name="HELL" value="HEVEAN" />
+		</refKColl>
+		<!-- some refService here 1 -->
+		<!-- some refService here 2 -->
+		<refService refId="JDBCIB2ConnectionManager" alias="connectionManager"
+			type="jdbcManager" />
+		<refService refId="realCSServer" alias="CSServer" type="cs" />
+		<refService alias="proximaService" refId="proximaService"
+			type="prx" />
+		<refService alias="dummyService" refId="dummyService" type="prx" />
+		<refService alias="messageResourcesSrv" refId="realMessageResourcesService"
+			type="multilan" />
+
+	</context>
+
+	<!-- SImple FlowNameData -->
+	<kColl id="FlowNameData">
+		<!-- data for GetLogonInfo -->
+		<!-- Data for GetUserINfo service (Mian flow) -->
+		<!-- common infrastructure fields -->
+		<field id="xml-response-encoding" value="ISO-8859-1" />
+		<fields id="global-error-indicator" />
+		<field id="mode" />
+		<!-- whats up man -->
+		<field id="type-call" value="01" />
+		<field id="was-return-code" />
+		<field id="text" />
+		<!-- Data for GetDIgitalCOntractInfo Service -->
+		<!-- Error Handling -->
+		<refData refId="LOGON-DATA" />
+		<refData refId="LOGON-DATA-LIST" />
+		<refData refId="CUSTOMER-DATA" />
+		<!-- Commons is not common -->
+		<refData refId="CommonJDBCData" />
+		<refData refId="CommonJournalData" />
+		<refData refId="SEWI-LIST" />
+	</kColl>
+
+	<!-- Simple CUSTOMER-DATA -->
+	<!-- Complex CUSTOMER-DATA -->
+	<kColl id="CUSTOMER-DATA">
+		<field id="name" />
+		<field id="first-name" />
+		<field id="language" />
+	</kColl>
+
+	<!-- Elemn Lodgn Data -->
+	<kColl id="LOGON-DATA">
+		<field id="logon-profiles" value="No Idea Dog" />
+		<field id="last-logon-timestamp" />
+		<refData refId="SEWI-LIST" />
+		<field id="previous-logon-timestamp" />
+		<field id="read-only" />
+		<refData refId="CommonJDBCData" />
+		<refData refId="ONE" />
+		<refData refId="TWO" />
+	</kColl>
+
+	<iColl id="LOGON-DATA-LIST">
+		<refDatas refId="LOGON-DATA" />
+	</iColl>
+
+
+	<kColl id="ONE">
+		<refData refId="TWO" />
+	</kColl>
+
+	<kColl id="TWO">
+		<field id="text" />
+	</kColl>
+
+
+	<state id="GetDigitalContractInfoState">
+		<entryActions>
+			<executeSubflowAct id="GetDigitalContractInfoAct"
+				processor="GetDigitalContractInfoOp" inputMapFmt="GetUserInfoOp_GetDigitalContractInfoOpInputMapFmt"
+				outputMapFmt="GetUserInfoOp_GetDigitalContractInfoOpOutputMapFmt">
+			</executeSubflowAct>
+		</entryActions>
+		<transitions>
+			<transition id="GetDigitalContractInfoAct.ok" targetState="globalErrorIndicatorState" />
+			<transition id="GetDigitalContractInfoAct.error"
+				targetState="globalErrorIndicatorState" />
+		</transitions>
+	</state>
+	<genMapper from="PS-HEADER.USER-CONTEXT.user-country" to="PS-HEADER.USER-CONTEXT.user-country"
+		byReference="true" />
+	<genMapper from="PS-HEADER.USER-CONTEXT.user-id" to="PS-HEADER.USER-CONTEXT.user-id"
+		byReference="true" />
+	<genMapper from="PS-HEADER.USER-CONTEXT.user-id-type" to="PS-HEADER.USER-CONTEXT.user-id-type"
+		byReference="true" />
+	<genMapper from="PS-HEADER.HTECH.channel" to="PS-HEADER.HTECH.channel"
+		byReference="true" />
+	<genMapper from="CommonJDBCData" to="CommonJDBCData"
+		byReference="true" />
+
+	<!--********* -->
+	<!-- Formats -->
+	<!--********* -->
+	<!-- GetLogonInfo Request mapper -->
+	<fmtDef id="GetUserInfoOp_GetLogonInfoOpInputMapFmt">
+		<multiMapper>
+			<genMapper from="PS-HEADER.CUSTOMER-CONTEXT.xb-customer-id"
+				to="PS-HEADER.CUSTOMER-CONTEXT.xb-customer-id" byReference="true" />
+			<genMapper from="PS-HEADER.USER-CONTEXT.user-country" to="PS-HEADER.USER-CONTEXT.user-country"
+				byReference="true" />
+			<genMapper from="PS-HEADER.USER-CONTEXT.user-id" to="PS-HEADER.USER-CONTEXT.user-id"
+				byReference="true" />
+			<genMapper from="PS-HEADER.USER-CONTEXT.user-id-type" to="PS-HEADER.USER-CONTEXT.user-id-type"
+				byReference="true" />
+			<genMapper from="PS-HEADER.HTECH.channel" to="PS-HEADER.HTECH.channel"
+				byReference="true" />
+			<genMapper from="CommonJDBCData" to="CommonJDBCData"
+				byReference="true" />
+			<!--<genMapper from="ORAWB" to="ORAWB" byReference="true"/> -->
+			<setFieldMapper to="doLogging" value="false" />
+			<setFieldMapper to="updateSEWIListFlag" value="false" />
+			<!--<setFieldMapper to="PS-HEADER.CUSTOMER-CONTEXT.xb-customer-id" value="02471994"/> 
+				<setFieldMapper to="PS-HEADER.USER-CONTEXT.user-country" value="BE"/> <setFieldMapper 
+				to="PS-HEADER.USER-CONTEXT.user-id" value="E1563650"/> <setFieldMapper to="PS-HEADER.USER-CONTEXT.user-id-type" 
+				value="02"/> <setFieldMapper to="PS-HEADER.HTECH.channel" value="52"/> -->
+			<genMapper from="xml-response-encoding" to="xml-response-encoding"
+				byReference="true" />
+			<genMapper from="global-error-indicator" to="global-error-indicator"
+				byReference="true" />
+			<genMapper from="was-return-code" to="was-return-code"
+				byReference="true" />
+			<genMapper from="text" to="text" byReference="true" />
+			<genMapper from="CommonJDBCData" to="CommonJDBCData"
+				byReference="true" />
+		</multiMapper>
+	</fmtDef>
+	<!-- GetLogonInfo Response mapper -->
+	<fmtDef id="GetUserInfoOp_GetLogonInfoOpOutputMapFmt">
+		<multiMapper>
+			<genMapper from="last-logon-timestamp" to="LOGON-DATA.last-logon-timestamp" />
+			<genMapper from="previous-logon-timestamp" to="LOGON-DATA.previous-logon-timestamp" />
+			<genMapper from="logon-profiles" to="LOGON-DATA.logon-profiles" />
+			<genMapper from="SEWI-LIST" to="SEWI-LIST" byReference="true" />
+		</multiMapper>
+	</fmtDef>
+	<!-- GetDigitalContractInfo request mappers -->
+	<fmtDef id="GetUserInfoOp_GetDigitalContractInfoOpInputMapFmt">
+		<multiMapper>
+			<setFieldMapper to="mode" value="MULTI" />
+			<setFieldMapper to="CONTRACT-SETTINGS.0.name" value="read-only" />
+			<genMapper from="PS-HEADER.USER-CONTEXT.user-country" to="PS-HEADER.USER-CONTEXT.user-country"
+				byReference="true" />
+			<genMapper from="PS-HEADER.USER-CONTEXT.user-id" to="PS-HEADER.USER-CONTEXT.user-id"
+				byReference="true" />
+			<genMapper from="PS-HEADER.USER-CONTEXT.user-id-type" to="PS-HEADER.USER-CONTEXT.user-id-type"
+				byReference="true" />
+			<genMapper from="PS-HEADER.USER-CONTEXT.user-brand" to="PS-HEADER.USER-CONTEXT.user-brand"
+				byReference="true" />
+			<genMapper from="type-call" to="WSE1.type-call"
+				byReference="true" />
+			<genMapper from="mode" to="mode" byReference="true" />
+			<genMapper from="xml-response-encoding" to="xml-response-encoding"
+				byReference="true" />
+			<genMapper from="global-error-indicator" to="global-error-indicator"
+				byReference="true" />
+			<genMapper from="was-return-code" to="was-return-code"
+				byReference="true" />
+			<genMapper from="text" to="text" byReference="true" />
+			<setFieldMapper to="doLogging" value="false" />
+		</multiMapper>
+	</fmtDef>
+	<!-- GetDigitalContractInfo response mappers -->
+	<fmtDef id="GetUserInfoOp_GetDigitalContractInfoOpOutputMapFmt">
+		<multiMapper>
+			<genMapper from="SETTINGS-LIST.0.value" to="LOGON-DATA.read-only"
+				byReference="true" />
+			<genMapper from="SEWI-LIST" to="SEWI-LIST" byReference="true" />
+		</multiMapper>
+	</fmtDef>
+	<!-- GetLightCustomerData request mappers -->
+	<fmtDef id="GetUserInfoOp_GetLightCustomerDataOpInputMapFmt">
+		<multiMapper>
+			<genMapper from="PS-HEADER.USER-CONTEXT.user-country" to="PS-HEADER.USER-CONTEXT.user-country"
+				byReference="true" />
+			<genMapper from="PS-HEADER.USER-CONTEXT.user-id" to="PS-HEADER.USER-CONTEXT.user-id"
+				byReference="true" />
+			<genMapper from="PS-HEADER.USER-CONTEXT.user-id-type" to="PS-HEADER.USER-CONTEXT.user-id-type"
+				byReference="true" />
+			<genMapper from="PS-HEADER.USER-CONTEXT.user-language" to="PS-HEADER.USER-CONTEXT.user-language"
+				byReference="true" />
+			<genMapper from="PS-HEADER.USER-CONTEXT.user-brand" to="PS-HEADER.USER-CONTEXT.user-brand"
+				byReference="true" />
+			<genMapper from="PS-HEADER.CUSTOMER-CONTEXT.psp" to="PS-HEADER.CUSTOMER-CONTEXT.psp"
+				byReference="true" />
+			<genMapper from="xml-response-encoding" to="xml-response-encoding"
+				byReference="true" />
+			<genMapper from="global-error-indicator" to="global-error-indicator"
+				byReference="true" />
+			<genMapper from="was-return-code" to="was-return-code"
+				byReference="true" />
+			<genMapper from="text" to="text" byReference="true" />
+			<setFieldMapper to="doLogging" value="false" />
+		</multiMapper>
+	</fmtDef>
+	<!-- GetLightCustomerData response mappers -->
+	<fmtDef id="GetUserInfoOp_GetLightCustomerDataOpOutputMapFmt">
+		<multiMapper>
+			<genMapper from="name" to="CUSTOMER-DATA.name" byReference="true" />
+			<genMapper from="first-name" to="CUSTOMER-DATA.first-name"
+				byReference="true" />
+			<genMapper from="language" to="CUSTOMER-DATA.language"
+				byReference="true" />
+			<genMapper from="SEWI-LIST" to="SEWI-LIST" byReference="true" />
+		</multiMapper>
+	</fmtDef>
+	<!-- ************* -->
+	<!-- * JRF Mapping * -->
+	<!-- ************* -->
+	<fmtDef id="GetUserInfoMIBInputPivotMapper">
+		<multiMapper>
+			<jrfMapper from="$userInformationRequest" to="."
+				currentImplClass="com.fortis.be.tfpl.mib.service.userInfo.in.UserInformationRequest" />
+		</multiMapper>
+	</fmtDef>
+	<fmtDef id="GetUserInfoMIBOutputPivotMapper">
+		<multiMapper>
+			<jrfMapper from="." to="$Response.value"
+				currentImplClass="com.fortis.be.tfpl.mib.service.userInfo.out.UserInformation">
+				<jrfMapper from="CUSTOMER-DATA" to="customerData"
+					currentImplClass="com.fortis.be.tfpl.mib.service.common.CustomerData">
+					<jrfMapper from="name" to="name" />
+					<jrfMapper from="first-name" to="firstName" />
+					<jrfMapper from="language" to="language.value" />
+				</jrfMapper>
+				<jrfMapper from="LOGON-DATA" to="logonData"
+					currentImplClass="com.fortis.be.tfpl.mib.service.common.LogonData">
+					<jrfMapper from="last-logon-timestamp" to="lastLogonTimestamp"
+						conversionPattern="yyyyMMddHHmmss" />
+					<jrfMapper from="previous-logon-timestamp" to="previousLogonTimestamp"
+						conversionPattern="yyyyMMddHHmmss" />
+					<jrfMapper from="read-only" to="readOnly" />
+					<jrfMapper from="logon-profiles" to="logonProfiles" />
+				</jrfMapper>
+			</jrfMapper>
+		</multiMapper>
+	</fmtDef>
+	<!-- Journal Logging -->
+	<fmtDef id="GetUserInfoOpJournalFmt">
+		<recXML tag="MSGLOG">
+			<refFmt refId="genericJournalHeaderFmt" />
+			<recXML tag="DATA">
+				<refFmt refId="genericJournalHeaderLoggingFmt" />
+				<recXML tag="QUESTION">
+				</recXML>
+				<recXML tag="REPLY">
+					<constXML tag="rl-01" value="LOGON-DATA.read-only" />
+					<fieldXML tag="rd-01" dataName="LOGON-DATA.read-only" />
+					<constXML tag="rl-02" value="LOGON-DATA.last-logon-timestamp" />
+					<fieldXML tag="rd-02" dataName="LOGON-DATA.last-logon-timestamp" />
+					<constXML tag="rl-03" value="LOGON-DATA.previous-logon-timestamp" />
+					<fieldXML tag="rd-03" dataName="LOGON-DATA.previous-logon-timestamp" />
+					<constXML tag="rl-04" value="CUSTOMER-DATA.name" />
+					<fieldXML tag="rd-04" dataName="CUSTOMER-DATA.name" />
+					<constXML tag="rl-05" value="CUSTOMER-DATA.first-name" />
+					<fieldXML tag="rd-05" dataName="CUSTOMER-DATA.first-name" />
+					<constXML tag="rl-06" value="CUSTOMER-DATA.language" />
+					<fieldXML tag="rd-06" dataName="CUSTOMER-DATA.language" />
+				</recXML>
+				<recXML tag="RETURN-CODES">
+					<constXML tag="rcl-01" value="was-return-code" />
+					<fieldXML tag="rcd-01" dataName="was-return-code" />
+					<fieldXML tag="rct-01" dataName="text" />
+					<refFmt refId="SEWI-LIST-XalosFmt" />
+				</recXML>
+			</recXML>
+		</recXML>
+	</fmtDef>
+	<!-- XML ouput formatter for service -->
+	<fmtDef id="GetUserInfoOpXMLResponseFmt">
+		<recXML show="false">
+			<fieldXML dataName="global-error-indicator" tag="global-error-indicator" />
+			<fieldXML dataName="was-return-code" tag="was-return-code" />
+			<fieldXML dataName="text" />
+			<refFmt refId="SEWI-LIST-TO-MESSAGE-LINE-LISTXMLFormat" />
+			<recXML dataName="CUSTOMER-DATA">
+				<fieldXML dataName="name" />
+				<fieldXML dataName="first-name" />
+				<fieldXML dataName="language" />
+			</recXML>
+			<recXML dataName="LOGON-DATA">
+				<fieldXML dataName="last-logon-timestamp" />
+				<fieldXML dataName="previous-logon-timestamp" />
+				<fieldXML dataName="read-only" />
+				<fieldXML dataName="logon-profiles" />
+			</recXML>
+		</recXML>
+	</fmtDef>
+</GetUserInfoOp.xml>

@@ -1,0 +1,31 @@
+<response>
+	<first-name></first-name>
+	<last-name></last-name>
+	<accounts>
+		<balance></balance>
+		<credit-amount></credit-amount>
+		<number-cache>
+			<decimal></decimal>
+			<point>int</point>
+		</number-cache>
+		<debit-amount></debit-amount>
+	</accounts>
+	<accounts>
+		<balance></balance>
+	</accounts>
+	<date-cache>
+		<today>Date</today>
+		<yesterday>Date</yesterday>
+		<tomorrow>Date</tomorrow>
+		<number-cache-list>
+		<number-cache>
+			<decimal></decimal>
+			<point>int</point>
+		</number-cache>
+		<number-cache>
+			<decimal></decimal>
+			<point>int</point>
+		</number-cache>
+		</number-cache-list>
+	</date-cache>
+</response>

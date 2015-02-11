@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refKColl1 refId="FlowNameData">
+	<!--some ref k coll 01 -->
+	<iniValue name="was-return-code" value="WAS0000" />
+	<refKColl2 refId="SubFlowNameData">
+		<!--some ref k coll 01 -->
+		<iniValue name="was-return-code" value="WAS0000" />
+		<!--some ref k coll 04 -->
+		<!--some ref k coll 044 -->
+		<!--some ref k coll 0444 -->
+		<refKColl4 refId="SubFlowNameData">
+			<!--some ref k coll 01 -->
+			<iniValue name="was-return-code" value="WAS0000" />
+			<refKColl5 refId="SubFlowNameData">
+				<!--some ref k coll 01 -->
+				<iniValue name="was-return-code" value="WAS0000" />
+				<!--some ref k coll 02 -->
+				<iniValue name="text" value="" />
+			</refKColl5>
+			<!--some ref k coll 02 -->
+			<iniValue name="text" value="" />
+		</refKColl4>
+		<!--some ref k coll 02 -->
+		<iniValue name="text" value="" />
+	</refKColl2>
+	<!--some ref k coll 02 -->
+	<iniValue name="text" value="" />
+	<refKColl3 refId="SubFlowNameData">
+		<!--some ref k coll 01 -->
+		<iniValue name="was-return-code" value="WAS0000" />
+		<!--some ref k coll 02 -->
+		<iniValue name="text" value="" />
+	</refKColl3>
+</refKColl1>

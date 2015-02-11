@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Create Data Model
+Bundle-SymbolicName: com.tcs.mobility.btt.createdatamodel;singleton:=true
+Bundle-Version: 3.0.1.qualifier
+Bundle-Activator: com.tcs.mobility.btt.createdatamodel.Activator
+Bundle-Vendor: TCS
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.tcs.mobility.btt.core,
+ org.eclipse.ui.console,
+ org.eclipse.core.resources,
+ org.eclipse.jdt.core,
+ org.eclipse.ui.ide,
+ org.eclipse.text,
+ org.eclipse.jdt.ui,
+ org.eclipse.jface.text
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy

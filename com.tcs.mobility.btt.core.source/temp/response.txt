@@ -1,0 +1,35 @@
+<response>
+	<first-name>String</first-name>
+	<last-name>String</last-name>
+	<accounts>
+		<balance>String</balance>
+		<credit-amount>String</credit-amount>
+		<number-cache>
+			<decimal>String</decimal>
+			<point>int</point>
+		</number-cache>
+		<debit-amount>String</debit-amount>
+	</accounts>
+	<accounts>
+		<balance>String</balance>
+	</accounts>
+	<date-cache>
+		<today>Date</today>
+		<yesterday>Date</yesterday>
+		<tomorrow>Date</tomorrow>
+		<balance-cache-list>
+			<balance-cache>int</balance-cache>
+			<balance-cache>int</balance-cache>
+		</balance-cache-list>
+		<number-cache-list>
+		<number-cache>
+			<decimal>String</decimal>
+			<point>int</point>
+		</number-cache>
+		<number-cache>
+			<decimal>String</decimal>
+			<point>int</point>
+		</number-cache>
+		</number-cache-list>
+	</date-cache>
+</response>

@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Debuglogger
+Bundle-SymbolicName: com.tcs.mobility.btt.logger.debuglogger;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.tcs.mobility.btt.logger.debuglogger.Activator
+Bundle-Vendor: TCS
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.tcs.mobility.btt.logger.core
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.core.resources

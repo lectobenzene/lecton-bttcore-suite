@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CoreLogger
+Bundle-SymbolicName: com.tcs.mobility.btt.logger.core
+Bundle-Version: 1.0.0
+Bundle-ClassPath: com.tcs.mobility.btt.logger.core.source.jar,
+ META-INF/,
+ lib/groovy-all-2.2.2.jar
+Export-Package: com.tcs.mobility.btt.logger.core.source.controller,
+ com.tcs.mobility.btt.logger.core.source.models,
+ com.tcs.mobility.btt.logger.core.source.parser,
+ groovy.util
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

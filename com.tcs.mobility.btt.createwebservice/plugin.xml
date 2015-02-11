@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.tcs.mobility.btt.bttcategory"
+            name="BTT(Custom)">
+      </category>
+      <wizard
+            category="com.tcs.mobility.btt.bttcategory"
+            class="com.tcs.mobility.btt.createopxml.wizards.NewOpFileWizard"
+            icon="icons/newfile.png"
+            id="com.tcs.mobility.btt.createopxml.newopfile"
+            name="Web Service">
+      </wizard>
+   </extension>
+
+</plugin>

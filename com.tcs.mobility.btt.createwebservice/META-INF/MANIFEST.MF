@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Create Op Xml
+Bundle-SymbolicName: com.tcs.mobility.btt.createwebservice;singleton:=true
+Bundle-Version: 3.0.1.qualifier
+Bundle-Activator: com.tcs.mobility.btt.createopxml.Activator
+Bundle-Vendor: TCS
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.console,
+ com.tcs.mobility.btt.core,
+ org.eclipse.jdt.core
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
