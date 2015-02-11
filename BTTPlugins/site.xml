@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.tcs.mobility.btt.CoreFeature_3.0.0.201406231812.jar" id="com.tcs.mobility.btt.CoreFeature" version="3.0.0.201406231812"/>
+   <feature url="features/com.tcs.mobility.btt.CreateWebServiceFeature_3.0.0.201406231812.jar" id="com.tcs.mobility.btt.CreateWebServiceFeature" version="3.0.0.201406231812"/>
+   <feature url="features/com.tcs.mobility.btt.Utilities_1.0.0.201406231812.jar" id="com.tcs.mobility.btt.Utilities" version="1.0.0.201406231812"/>
+</site>
